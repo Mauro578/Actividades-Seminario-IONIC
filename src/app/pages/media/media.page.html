@@ -1,0 +1,58 @@
+<ion-content class="ion-padding">
+
+  <ion-button expand="block" (click)="requestPermissions()">
+    Solicitar permisos
+  </ion-button>
+
+  <p>Cámara: {{ cameraGranted ? 'Concedida' : 'No concedida' }}</p>
+  <p>Micrófono: {{ micGranted ? 'Concedido' : 'No concedido' }}</p>
+
+  <video
+    #video
+    autoplay
+    muted
+    playsinline>
+  </video>
+
+  <ion-button
+    *ngIf="cameraGranted"
+    expand="block"
+    (click)="takePhoto()">
+    Tomar foto
+  </ion-button>
+
+  <img *ngIf="imageData" [src]="imageData" />
+
+  <ion-button
+    *ngIf="micGranted"
+    color="danger"
+    expand="block"
+    (click)="recordAudio()">
+    Grabar audio (5 segundos)
+  </ion-button>
+
+  <p *ngIf="isRecording" style="color:red;font-weight:bold">
+    🎙 Grabando audio...
+  </p>
+
+  <audio *ngIf="audioUrl" [src]="audioUrl" controls></audio>
+
+  <ion-item>
+    <ion-input
+      placeholder="Descripción de la captura"
+      [(ngModel)]="description">
+    </ion-input>
+  </ion-item>
+
+  <ion-button expand="block" (click)="analyzeText()">
+    Analizar texto
+  </ion-button>
+
+  <ion-spinner *ngIf="loadingAnalysis"></ion-spinner>
+
+  <div *ngIf="analysisResult">
+    <p>Resultado: {{ analysisResult.label }}</p>
+    <p>Confianza: {{ analysisResult.score | number:'1.2-2' }}</p>
+  </div>
+
+</ion-content>

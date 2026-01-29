@@ -1,0 +1,1 @@
+En GitHub no es posible publicar una API key real, por lo que solo se debe colocar el último dígito de la clave, que en este caso es la M, y la funcionalidad funciona correctamente

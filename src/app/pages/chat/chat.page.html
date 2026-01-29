@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Chat con Qwen</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="chat">
+    <div
+      class="msg"
+      *ngFor="let m of messages; trackBy: trackByIndex"
+      [class.user]="m.from === 'user'"
+      [class.bot]="m.from === 'bot'"
+    >
+      {{ m.text }}
+    </div>
+  </div>
+
+  <ion-spinner *ngIf="sending"></ion-spinner>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-input
+        [(ngModel)]="input"
+        placeholder="Escribe tu mensaje..."
+        (keyup.enter)="send()">
+      </ion-input>
+
+      <ion-button (click)="send()" [disabled]="sending || !input.trim()">
+        Enviar
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

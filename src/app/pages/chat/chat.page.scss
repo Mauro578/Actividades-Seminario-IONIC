@@ -1,0 +1,23 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 8px;
+}
+
+.msg {
+  max-width: 85%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  white-space: pre-wrap;
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: rgba(0,0,0,0.08);
+}
+
+.msg.bot {
+  align-self: flex-start;
+  background: rgba(0,0,0,0.04);
+}

@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mapa de exploración</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="locateUser()" [disabled]="loadingLocation">
+        Actualizar ubicación
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="info">
+    <ion-text color="danger" *ngIf="errorMsg">
+      <p>{{ errorMsg }}</p>
+    </ion-text>
+
+    <ion-spinner *ngIf="loadingLocation"></ion-spinner>
+
+    <ion-text *ngIf="userCoords && !loadingLocation">
+      <p>Tu ubicación: {{ userCoords.lat | number:'1.5-5' }}, {{ userCoords.lng | number:'1.5-5' }}</p>
+    </ion-text>
+
+    <ion-text *ngIf="!userCoords && !loadingLocation && !errorMsg">
+      <p>Permite el acceso a ubicación para centrar el mapa en tu posición.</p>
+    </ion-text>
+  </div>
+
+  <!-- Contenedor del mapa -->
+  <div id="map"></div>
+
+  <!-- Modal de detalle del punto -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Detalle del punto</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="modal.dismiss()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <ion-card *ngIf="selectedPoi">
+          <ion-card-header>
+            <ion-card-title>{{ selectedPoi.name }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p>{{ selectedPoi.description }}</p>
+            <p><strong>Coordenadas:</strong> {{ selectedPoi.lat }}, {{ selectedPoi.lng }}</p>
+
+            <p *ngIf="distanceToSelectedMeters !== null">
+              <strong>Distancia aproximada:</strong>
+              {{ distanceToSelectedMeters | number:'1.0-0' }} metros
+            </p>
+
+            <p *ngIf="distanceToSelectedMeters === null">
+              Activa la ubicación para calcular la distancia.
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

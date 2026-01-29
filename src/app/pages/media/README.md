@@ -1,0 +1,3 @@
+Los permisos de cámara y micrófono se gestionan mediante la API getUserMedia del navegador. Al hacer clic en el botón correspondiente, el usuario puede otorgar estos permisos y visualizar su estado en pantalla. Una vez concedidos, se activa la vista previa de la cámara, la opción de capturar una imagen y la posibilidad de grabar audio durante cinco segundos.
+
+Para la integración con una API externa, se utiliza un análisis de sentimiento de texto, lo que permite procesar fácilmente la información ingresada por el usuario. Al enviar una descripción escrita relacionada con la captura realizada, la API devuelve una etiqueta de sentimiento junto con su nivel de confianza, los cuales se muestran de forma clara en la interfaz.
