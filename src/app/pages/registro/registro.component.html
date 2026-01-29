@@ -1,92 +1,71 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Registro de Usuario</ion-title>
+    <ion-title>Registro de productos</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-button routerLink="">
-      Ir al Inicio
-</ion-button>
-
 <ion-content class="ion-padding">
-  <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
-    <ion-list>
-      <ion-item>
-        <ion-label position="stacked">Nombre completo</ion-label>
-        <ion-input formControlName="nombre" placeholder="Ingresa tu nombre"></ion-input>
-      </ion-item>
-      <ion-text *ngIf="f['nombre'].touched && f['nombre'].invalid">
-        <p *ngIf="f['nombre'].errors?.['required']">El nombre es obligatorio.</p>
-        <p *ngIf="f['nombre'].errors?.['minlength']">Usa mínimo 3 caracteres.</p>
-      </ion-text>
-      <ion-item>
-        <ion-label position="stacked">Correo electrónico</ion-label>
-        <ion-input formControlName="correo" placeholder="correo@ejemplo.com" type="email"></ion-input>
-      </ion-item>
-      <ion-text *ngIf="f['correo'].touched && f['correo'].invalid">
-        <p *ngIf="f['correo'].errors?.['required']">El correo es obligatorio.</p>
-        <p *ngIf="f['correo'].errors?.['email']">El correo no tiene un formato válido.</p>
-      </ion-text>
-      <ion-item>
-        <ion-label position="stacked">País</ion-label>
-        <ion-select formControlName="pais" placeholder="Seleccione in país">
-          <ion-select-option value="co">Colombia</ion-select-option>
-          <ion-select-option value="mx">México</ion-select-option>
-          <ion-select-option value="ar">Argentina</ion-select-option>
-        </ion-select>
-      </ion-item>
-      <ion-text *ngIf="f['pais'].touched && f['pais'].invalid">
-        <p>Selecciona un país.</p>
-      </ion-text>
-      <ion-item>
-        <ion-label position="stacked">Fecha de nacimiento</ion-label>
-        <ion-datetime formControlName="fechaNacimiento" presentation="date"></ion-datetime>
-      </ion-item>
-      <ion-text *ngIf="f['fechaNacimiento'].touched && f['fechaNacimiento'].invalid">
-        <p>Selecciona una fecha.</p>
-      </ion-text>
-      <ion-item>
-        <ion-label>Género</ion-label>
-      </ion-item>
-      <ion-radio-group formControlName="genero">
-        <ion-item>
-          <ion-label>Masculino</ion-label>
-          <ion-radio value="m"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label>Femenino</ion-label>
-          <ion-radio value="f"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
-      <ion-text *ngIf="f['genero'].touched && f['genero'].invalid">
-        <p>Selecciona una opción.</p>
-      </ion-text>
 
-      <ion-item>
-        <ion-label>Recibir notificaciones</ion-label>
-        <ion-toggle formControlName="notificaciones"></ion-toggle>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Biografía</ion-label>
-        <ion-textarea formControlName="biografia" placeholder="Cuéntanos sobre ti"></ion-textarea>
-      </ion-item>
-      <ion-text *ngIf="f['biografia'].touched && f['biografia'].invalid">
-        <p *ngIf="f['biografia'].errors?.['maxlength']">Máximo 200 caracteres.</p>
-      </ion-text>
+  <form [formGroup]="formulario" (ngSubmit)="registrar()">
 
-      <ion-item lines="none">
-        <ion-checkbox formControlName="terminos"></ion-checkbox>
-        <ion-label class="ion-padding-start">Acepto términos y condiciones</ion-label>
-      </ion-item>
-      <ion-text *ngIf="f['terminos'].touched && f['terminos'].invalid">
-        <p>Debes aceptar los términos.</p>
-      </ion-text>
-    </ion-list>
-    <ion-button expand="block" class="ion-margin-top" type="submit" routerLink="/listado-registros">
-      Registrar
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input formControlName="nombre"></ion-input>
+    </ion-item>
+    <ion-note color="danger"
+      *ngIf="enviado && formulario.get('nombre')?.invalid">
+      El nombre es obligatorio (mínimo 3 caracteres)
+    </ion-note>
+
+    <ion-item>
+      <ion-label position="floating">Precio</ion-label>
+      <ion-input type="number" formControlName="precio"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Categoría</ion-label>
+      <ion-select formControlName="categoria">
+        <ion-select-option *ngFor="let c of categorias" [value]="c">
+          {{ c }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Fecha de ingreso</ion-label>
+      <ion-datetime presentation="date" formControlName="fechaIngreso"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Disponible</ion-label>
+      <ion-toggle formControlName="disponible"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="descripcion"></ion-textarea>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-checkbox formControlName="confirmar"></ion-checkbox>
+      <ion-label class="ion-margin-start">
+        Confirmo el registro del artículo
+      </ion-label>
+    </ion-item>
+
+    <ion-button expand="block" type="submit">
+      Guardar artículo
     </ion-button>
+
+    <ion-text color="danger"
+      *ngIf="enviado && formulario.invalid">
+      ⚠️ El registro está incompleto. Revise los campos obligatorios.
+    </ion-text>
+
+    <ion-button expand="block" fill="outline" routerLink="/listado-registros">
+      Ver listado
+    </ion-button>
+
   </form>
-  <ion-text *ngIf="guardadoOK">
-    <p>Registro guardado correctamente.</p>
-  </ion-text>
+
 </ion-content>

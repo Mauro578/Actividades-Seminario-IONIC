@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { PhotosService, Photo } from '../../services/photos.service';
-import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.page.html',
   styleUrls: ['./gallery.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule,RouterLink]
+  imports: [CommonModule, IonicModule]
 })
 export class GalleryPage implements OnInit {
   photos: Photo[] = [];

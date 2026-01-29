@@ -1,51 +1,34 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Registros Guardados</ion-title>
+    <ion-title>Listado de artículos</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-button routerLink="">
       Ir al Inicio
 </ion-button>
 
+
 <ion-content class="ion-padding">
-  <ion-button expand="block" (click)="cargar()">
-    Recargar
-  </ion-button>
-  <ion-button expand="block" fill="outline" (click)="confirmarBorrado()">
-    Borrar todo
-  </ion-button>
-  <ion-text *ngIf="cargando">
-    <p>Cargando registros</p>
-  </ion-text>
 
-  <ion-text *ngIf="!cargando && registros.length === 0">
-    <p>No hay registros guardados</p>
-  </ion-text>
-
-
-  <ion-card *ngFor="let r of registros">
+  <ion-card *ngFor="let a of articulos">
     <ion-card-header>
-      <ion-card-title>{{ r.nombre }}</ion-card-title>
-      <ion-card-subtitle>
-        {{ r.correo }} - {{ r.pais }} - {{ r.createdAt | date: 'medium' }}
-      </ion-card-subtitle>
+      <ion-card-title>{{ a.nombre }}</ion-card-title>
+      <ion-card-subtitle>{{ a.categoria }}</ion-card-subtitle>
     </ion-card-header>
 
     <ion-card-content>
-      <p><strong>Genero: </strong> {{ r.genero }}</p>
-      <p><strong>Fecha de nacimiento: </strong> {{ r.fechaNacimiento }}</p>
-      <p><strong>Notificaciones: </strong> {{ r.notificaciones ? 'Si' : 'No' }}</p>
-
-      <p *ngIf="r.biografia">
-        <strong>Biografía: </strong> {{ r.biografia }}
-      </p>
-
-      <p><strong>Términos: </strong> {{ r.terminos ? 'Aceptados' : 'No aceptados' }}</p>
+      <p><strong>Precio:</strong> ${{ a.precio }}</p>
+      <p><strong>Fecha:</strong> {{ a.fechaIngreso }}</p>
+      <p><strong>Estado:</strong> {{ a.disponible ? 'Activo' : 'Inactivo' }}</p>
     </ion-card-content>
   </ion-card>
-  <ion-button expand="block" routerLink="/registro" class="ion-margin-top">
-    Volver al registro de usuarios
-  </ion-button>
-</ion-content>
 
+  <ion-button expand="block" color="danger" (click)="confirmarBorrado()">
+    Borrar todos los artículos
+  </ion-button>
+
+  <ion-button expand="block" fill="outline" routerLink="/registro">
+    Volver al registro
+  </ion-button>
+
+</ion-content>

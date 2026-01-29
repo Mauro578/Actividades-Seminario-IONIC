@@ -1,74 +1,51 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IonicModule, AlertController } from '@ionic/angular';
+import { RouterModule } from '@angular/router';
+import { StorageService } from '../../services/storage.service';
 import { RouterLink } from '@angular/router';
 
-import { 
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardSubtitle,
-  IonCardContent,
-  IonButton,
-  IonText
- } from '@ionic/angular/standalone';
-
-import { Registro, StorageService } from '../../services/storage.service';
-
 @Component({
+  standalone: true,
   selector: 'app-listado-registros',
   templateUrl: './listado-registros.component.html',
   styleUrls: ['./listado-registros.component.scss'],
-  imports: [
-    CommonModule,
-    DatePipe,
-    RouterLink,
-
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    IonCardContent,
-    IonButton,
-    IonText
-  ]
+  imports: [CommonModule, IonicModule, RouterModule,RouterLink]
 })
-export class ListadoRegistrosComponent  implements OnInit {
-  registros: Registro[] = [];
-  cargando = true;
+export class ListadoRegistrosComponent { // Clase renombrada para coincidir con tus rutas
 
-  constructor(private storageSvc: StorageService) { }
+  articulos: any[] = [];
 
-  async ngOnInit() {
-    await this.cargar();
-  }
+  constructor(
+    private storageService: StorageService,
+    private alertCtrl: AlertController
+  ) {}
+
   ionViewWillEnter() {
     this.cargar();
   }
 
-
-  async cargar(){
-    this.cargando = true;
-    this.registros = await this.storageSvc.getRegistros();
-    this.cargando = false;
+  async cargar() {
+    this.articulos = await this.storageService.obtenerArticulos();
   }
 
-  async borrarTodo(){
-    this.cargando = true;
-    await this.storageSvc.clearRegistros();
-    await this.cargar();
-  }
-  confirmarBorrado() {
-  if (confirm('¿Seguro que deseas borrar todos los registros?')) {
-    this.borrarTodo();
-  }
-}
+  async confirmarBorrado() {
+    const alerta = await this.alertCtrl.create({
+      header: 'Eliminar registros',
+      message: '¿Desea borrar todos los artículos almacenados?',
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: async () => {
+            await this.storageService.eliminarTodos();
+            this.articulos = [];
+          }
+        }
+      ]
+    });
 
+    await alerta.present();
+  }
 }

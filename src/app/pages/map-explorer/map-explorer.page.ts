@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, IonModal } from '@ionic/angular';
 import * as L from 'leaflet';
-import { RouterLink } from '@angular/router';
 type Poi = {
   id: string;
   name: string;
@@ -14,7 +13,7 @@ type Poi = {
 @Component({
   selector: 'app-map-explorer',
   standalone: true,
-  imports: [CommonModule, IonicModule,RouterLink],
+  imports: [CommonModule, IonicModule],
   templateUrl: './map-explorer.page.html',
   styleUrls: ['./map-explorer.page.scss'],
 })

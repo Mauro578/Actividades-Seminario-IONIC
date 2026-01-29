@@ -1,52 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder,ReactiveFormsModule,FormGroup, Validators } from '@angular/forms';
-import { IonHeader,IonToolbar,IonTitle,IonContent,IonList,IonItem,IonLabel,IonInput,IonSelect,
-  IonSelectOption,IonDatetime,IonRadio,IonRadioGroup,IonToggle,IonTextarea,IonCheckbox,IonButton,IonText } from '@ionic/angular/standalone';
-import { RouterLink } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { StorageService } from '../../services/storage.service';
 
-import {StorageService} from '../../services/storage.service';
 @Component({
-  selector: 'app-registro',
   standalone: true,
-  templateUrl: './registro.component.html',
+  selector: 'app-registro',
+  templateUrl: './registro.component.html', 
   styleUrls: ['./registro.component.scss'],
-  imports: [IonHeader,CommonModule,ReactiveFormsModule,IonToolbar,IonTitle,IonContent,IonList,IonItem,IonLabel,IonInput,IonSelect,
-    IonSelectOption,IonDatetime,IonRadio,IonRadioGroup,IonToggle,IonTextarea,IonCheckbox,IonButton,IonText,RouterLink
-  ]
+  imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule]
 })
-export class RegistroComponent {
-  registroForm: FormGroup;
+export class RegistroComponent { 
+
   enviado = false;
-  guardadoOK = false;
 
-  constructor(private fb: FormBuilder, private storageSvc: StorageService) { 
-    this.registroForm = this.fb.group({
-      nombre: ['',[Validators.required,Validators.minLength(3)]],
-      correo: ['',[Validators.required,Validators.email]],
-      pais: [null,[Validators.required]],
-      fechaNacimiento: [null,[Validators.required]],
-      genero: [null,[Validators.required]],
-      notificaciones: [true],
-      biografia: ['', [Validators.maxLength(200)]],
-      terminos: [false, [Validators.requiredTrue]]
-    })
-  }
+  categorias = [
+    'Tecnología',
+    'Ropa',
+    'Alimentos',
+    'Accesorios'
+  ];
 
-  get f(){
-    return this.registroForm.controls;
-  }
+  formulario = this.fb.group({
+    nombre: ['', [Validators.required, Validators.minLength(3)]],
+    precio: [null, [Validators.required, Validators.min(1)]],
+    categoria: ['', Validators.required],
+    fechaIngreso: ['', Validators.required],
+    disponible: [true],
+    descripcion: [''],
+    confirmar: [false, Validators.requiredTrue]
+  });
 
-  async onSubmit() {
+  constructor(
+    private fb: FormBuilder,
+    private storageService: StorageService,
+    private router: Router
+  ) {}
+
+  async registrar() {
     this.enviado = true;
-    this.guardadoOK = false;
 
-    if(this.registroForm.invalid){
-      this.registroForm.markAllAsTouched();
+    if (this.formulario.invalid) {
       return;
     }
+
+    // Guardamos los datos y navegamos al listado
+    await this.storageService.guardarArticulo(this.formulario.value);
+    this.formulario.reset();
+    this.enviado = false;
     
-    await this.storageSvc.addRegistro(this.registroForm.value);
-    this.guardadoOK = true;
+    // Asegúrate de que esta ruta '/listado' coincida con tu app.routes.ts
+    this.router.navigate(['/listado-registros']);
   }
 }
